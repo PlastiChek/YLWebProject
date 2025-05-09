@@ -48,8 +48,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def handle_messages(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    text = update.message.text
+    if not update.message:
+        return
+
     user = update.effective_user
+    text = update.message.text if update.message.text else ""
 
     if user.id == ADMIN_ID:
         if text == "📢 Сделать рассылку":
@@ -157,14 +160,40 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def admin_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Рассылка сообщения всем подписчикам"""
     message = update.message
     success_count = 0
     fail_count = 0
     errors = []
 
+    # Определяем тип контента
+    content_type = None
+    if message.text:
+        content_type = "text"
+    elif message.photo:
+        content_type = "photo"
+    elif message.document:
+        content_type = "document"
+
     for user_id in subscribed_users:
         try:
-            await message.copy(user_id)
+            if content_type == "text":
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text=message.text
+                )
+            elif content_type == "photo":
+                await context.bot.send_photo(
+                    chat_id=user_id,
+                    photo=message.photo[-1].file_id,
+                    caption=message.caption
+                )
+            elif content_type == "document":
+                await context.bot.send_document(
+                    chat_id=user_id,
+                    document=message.document.file_id,
+                    caption=message.caption
+                )
             success_count += 1
         except Exception as e:
             fail_count += 1
@@ -173,6 +202,7 @@ async def admin_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
     report = (
         f"📊 <b>Отчет о рассылке</b>\n\n"
+        f"📤 Тип: <b>{content_type}</b>\n"
         f"✅ Получили: <b>{success_count}</b>\n"
         f"❌ Не доставлено: <b>{fail_count}</b>\n"
         f"👥 Всего подписчиков: <b>{len(subscribed_users)}</b>"
@@ -223,6 +253,15 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_messages))
 
+    # Универсальный обработчик для всех типов сообщений от админа
+    application.add_handler(MessageHandler(
+        filters.Chat(ADMIN_ID) & (
+                filters.TEXT |
+                filters.PHOTO |
+                filters.ATTACHMENT
+        ),
+        admin_message
+    ))
 
     application.run_polling()
 
