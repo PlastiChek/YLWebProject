@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 xmlns="http://www.w3.org/1999/html">Добавить товар</h1>
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control") }}<br>
+        {% for error in form.name.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.price.label }}<br>
+        {{ form.price(class="form-control") }}<br>
+        {% for error in form.price.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.provider.label }}<br>
+        {{ form.provider(class="form-control") }}<br>
+        {% for error in form.provider.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.type.label }}<br>
+        {{ form.type(class="form-control") }}<br>
+        {% for error in form.type.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <a href="catalog" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Каталог</a><br>
+
+    {{message}}
+</form>
+{% endblock %}
