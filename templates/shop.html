@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн-магазин</title>
+    <!-- подключаем бутстрап -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+<!-- создаём контейнер -->
+<div class="container">
+    <div class="row">
+        <!-- указываем стиль адаптивной вёрстки -->
+        <div class="col-md-12">
+            <!-- пишем заголовок и пояснительный текст -->
+            <h2>Добро пожаловать в онлайн магазин</h2>
+            <p>
+                <!-- кнопки -->
+                <a href="basket" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Корзина</a>
+                <a href="add" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Добавить товар</a>
+                <a href="registration" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Поддержка</a>
+                <a href="registration" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Полезная информация</a>
+                <a href="find" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Поиск товаров</a>
+                <a href="office" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Аккаунт</a>
+            </p>
+            <h2>Каталог</h2>
+            <p>
+                <img src="{{url_for('static', filename='img/cola.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+                <img src="{{url_for('static', filename='img/cud.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+                <img src="{{url_for('static', filename='img/liner.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+                <img src="{{url_for('static', filename='img/lipton.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+                <img src="{{url_for('static', filename='img/milka.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+                <img src="{{url_for('static', filename='img/notebook.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+                <img src="{{url_for('static', filename='img/pencil.jpg')}}" width="150" height="150" alt="здесь должна была быть картинка, но не нашлась">
+            </p>
+            <p>
+                <!-- кнопки для добавления в корзину -->
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">В корзину</a>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
