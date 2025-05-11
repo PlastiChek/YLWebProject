@@ -7,6 +7,49 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
+    <style>
+        body {
+          background-color: #f8f9fa; /* Светло-серый фон */
+          font-family: 'Arial', sans-serif;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh; /* Обеспечивает заполнение всего экрана */
+          margin: 0; /* Убирает стандартные отступы */
+          background: linear-gradient(to bottom, #e0f2f7, #cce5ff); /* Нежный голубой градиент */
+        }
+
+        header {
+          background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон для шапки */
+          padding: 20px;
+          text-align: center;
+          margin-bottom: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+          flex: 1; /* Растягивает main на оставшееся пространство */
+        }
+
+        footer {
+          background-color: #343a40; /* Темно-серый фон для подвала */
+          color: white;
+          text-align: center;
+          padding: 10px;
+          margin-top: 20px;
+        }
+
+        /* Ссылка на Telegram */
+        .telegram-link {
+          color: white; /* Белый цвет текста */
+          text-decoration: none; /* Убирает подчеркивание */
+        }
+
+        .telegram-link:hover {
+          text-decoration: underline; /* Подчеркивание при наведении */
+        }
+
+    </style>
     <title>{{title}}</title>
 </head>
 <body>
@@ -19,5 +62,9 @@
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
+<footer>
+    <p><a class="telegram-link" href="https://t.me/ваша_ссылка_на_телеграм" target="_blank">Поддержка</a></p>
+    <p><a class="telegram-link" href="https://t.me/ваша_ссылка_на_телеграм" target="_blank">Полезная информация</a></p>
+</footer>
 </body>
 </html>

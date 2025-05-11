@@ -1,26 +1,122 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title>Онлайн-магазин</title>
-        <!-- подключаем бутстрап -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    </head>
-    <body>
-        <!-- создаём контейнер -->
-        <div class="container">
-            <div class="row">
-                <!-- указываем стиль адаптивной вёрстки -->
-                <div class="col-md-12">
-                    <!-- пишем заголовок и пояснительный текст -->
-                    <h2>Привет! Добро пожаловать на сайт.</h2>
-                    <p>
-                    <!-- кнопка для выхода -->
-                    <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Вход</a>
-                    <a href="registration" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Регистрация</a>
-                </p>
-                </div>
-            </div>
-        </div>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Онлайн-магазин</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa; /* Светло-серый фон */
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Обеспечивает заполнение всего экрана */
+      margin: 0; /* Убирает стандартные отступы */
+      background: linear-gradient(to bottom, #e0f2f7, #cce5ff); /* Нежный голубой градиент */
+    }
+
+    .container {
+      max-width: 960px; /* Ограничивает ширину контента */
+      padding: 20px;
+      margin: 0 auto; /* Центрирует контент */
+    }
+
+    header {
+      background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон для шапки */
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    main {
+      flex: 1; /* Растягивает main на оставшееся пространство */
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Центрирует контент по горизонтали */
+      justify-content: center; /* Центрирует контент по вертикали */
+    }
+
+    footer {
+      background-color: #343a40; /* Темно-серый фон для подвала */
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+    }
+
+    /* Стили для светло-синих кнопок */
+    .btn-primary {
+      background-color: #87CEEB; /* Светло-синий цвет (Sky Blue) */
+      border-color: #87CEEB;
+      color: white; /* Белый текст */
+    }
+
+    .btn-primary:hover {
+      background-color: #70a3cc;
+      border-color: #6a97be;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1.2rem;
+    }
+
+    /* Стили для изображений */
+    .image-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px; /* Увеличенное расстояние между изображениями и текстом */
+    }
+
+    .image-container img {
+      max-width: 300px; /* Ограничивает ширину изображений */
+      height: auto;
+      border-radius: 8px; /* Скругление углов */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для изображений */
+      margin: 0 10px; /* Отступы между изображениями */
+    }
+
+    .main-text {
+      font-size: 2rem;
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px; /* Добавлено расстояние между главным текстом и изображениями */
+    }
+
+    /* Ссылка на Telegram */
+    .telegram-link {
+      color: white; /* Белый цвет текста */
+      text-decoration: none; /* Убирает подчеркивание */
+    }
+
+    .telegram-link:hover {
+      text-decoration: underline; /* Подчеркивание при наведении */
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Онлайн-магазин</h1>
+    <p>Товары на любой вкус</p>
+  </header>
+
+  <main>
+    <a href="login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Войти</a><br>
+    <a href="registration" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Регистрация</a><br>
+  </main>
+
+  <footer>
+    <p><a class="telegram-link" href="https://t.me/ваша_ссылка_на_телеграм" target="_blank">Поддержка</a></p>
+      <p><a class="telegram-link" href="https://t.me/ваша_ссылка_на_телеграм" target="_blank">Полезная информация</a></p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>

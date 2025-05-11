@@ -4,8 +4,11 @@ from forms.RegisterForm import RegisterForm
 from forms.Loginform import LoginForm
 from forms.OfficeForm import OfficeForm
 from forms.FindForm import FindForm
+from forms.AddingBasketForm import AddingBasketForm
+from forms.DeleteForm import DeleteForm
 from data.users import User
 from data.products import Product
+from data.basket import Basket
 from data import db_session
 import sys
 import requests
@@ -13,7 +16,6 @@ import requests
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db_session.global_init('db/shops.sqlite')
-db_session.global_init('db/basket.sqlite')
 db_sess = db_session.create_session()
 
 
@@ -116,6 +118,12 @@ def my_office():
     form.email.data = user.email
     form.password.data = user.password
     return render_template('office.html', title='Ваш аккаунт', form=form)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect('/login')
 
 
 @app.route('/find', methods=['GET', 'POST'])
@@ -231,19 +239,91 @@ def catalog():
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():
     db_sess = db_session.create_session()
-    products_db = db_sess.query(Product).all()
-    names = [product.name for product in products_db]
-    prices = [product.price for product in products_db]
-    providers = [product.provider for product in products_db]
-    types = [product.type for product in products_db]
+    basket = db_sess.query(Basket).all()
+    names = [product.name for product in basket]
+    prices = [product.price for product in basket]
+    providers = [product.provider for product in basket]
     result = []
     for index in range(len(names)):
         stroka = (
-            f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}, "
-            f"Тип продукта: {types[index - 1]}")
+            f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}")
         result.append(stroka)
 
-    return render_template('catalog.html', list=result)
+    return render_template('basket.html', list=result)
+
+
+@app.route('/adding-basket', methods=['GET', 'POST'])
+def adding_basket():
+    form = AddingBasketForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if not db_sess.query(Product).filter(Product.name == form.name.data).first():
+            return render_template('adding-basket.html', title='Добавить товар в корзину',
+                                   form=form, message='Такого названия товара нет')
+        elif not db_sess.query(Product).filter(Product.price == form.price.data).first():
+            return render_template('adding-basket.html', title='Добавить товар в корзину',
+                                   form=form, message='Такой цены товара нет')
+
+        elif db_sess.query(Product).filter(Product.provider == form.provider.data).first():
+            return render_template('adding-basket.html', title='Добавить товар в корзину',
+                                   form=form, message='Такого поставщика товара нет')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return redirect('/adding-basket')
+
+    return render_template('adding-basket.html', title='Добавить товар в корзину', form=form)
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    form = DeleteForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if not db_sess.query(Basket).filter(Basket.name == form.name.data).first():
+            return render_template('adding-basket.html', title='Удалить товар',
+                                   form=form, message='Такого названия товара нет')
+        elif not db_sess.query(Basket).filter(Basket.price == form.price.data).first():
+            return render_template('delete.html', title='Удалить товар',
+                                   form=form, message='Такой цены товара нет')
+
+        elif db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
+            return render_template('delete.html', title='Удалить товар',
+                                   form=form, message='Такого поставщика товара нет')
+
+        product = db_sess.query(User).filter(Basket.name == form.name.data, Basket.price == form.price.data,
+                                             Basket.provider == form.provider.data).first()
+        db_sess.delete(product)
+        db_sess.commit()
+
+        return redirect('/delete')
+
+    return render_template('delete.html', title='Удалить товар', form=form)
+
+
+@app.route('/buy', methods=['GET', 'POST'])
+def buy():
+    db_sess = db_session.create_session()
+    basket = db_sess.query(Basket).all()
+    names = [product.name for product in basket]
+    prices = [product.price for product in basket]
+    providers = [product.provider for product in basket]
+    result = []
+    count = 0
+    for index in range(len(names)):
+        stroka = (
+            f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}")
+        result.append(stroka)
+        count += prices[index - 1]
+    result.append(f"Итого: {count} рублей")
+
+    return render_template('buy.html', list=result)
 
 
 if __name__ == '__main__':
