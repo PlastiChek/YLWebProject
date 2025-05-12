@@ -9,7 +9,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-BOT_TOKEN = '7681923219:AAHAVieNBa9RbxcenAr9avg80-KXr6HneCw'  # Замените на реальный токен
+BOT_TOKEN = '7681923219:AAHAVieNBa9RbxcenAr9avg80-KXr6HneCw'
 
 # Состояния для ConversationHandler
 SELECTING_ACTION, ENTERING_ID, ENTERING_MESSAGE = range(3)
@@ -18,7 +18,7 @@ SELECTING_ACTION, ENTERING_ID, ENTERING_MESSAGE = range(3)
 users_db = {
     "123": {"name": "Иван Иванов", "telegram_id": 654321},
     "456": {"name": "Петр Петров", "telegram_id": 987654},
-    "789": {"name": "Сергей Сергеев", "telegram_id": 1427154863}  # Ваш реальный Telegram ID
+    "789": {"name": "Сергей Сергеев", "telegram_id": 1427154863}
 }
 
 
@@ -92,7 +92,7 @@ async def enter_id(update: Update, context: CallbackContext):
 
 async def enter_message(update: Update, context: CallbackContext):
     message_text = update.message.text
-    sender_id = "456"  # Замените на реальный ID отправителя из вашей системы
+    sender_id = "456"  #TODO: заменить на системный
 
     if message_text == 'Отмена':
         await update.message.reply_text("Действие отменено.", reply_markup=get_main_keyboard())
@@ -109,7 +109,6 @@ async def enter_message(update: Update, context: CallbackContext):
 
     await update.message.reply_text(sender_message, reply_markup=get_main_keyboard())
 
-    # Сообщение для получателя (РАСКОММЕНТИРОВАНО!)
     recipient_message = f"""📨 Вам новое сообщение от пользователя с ID: {sender_id}
 ----------------------------
 {message_text}
