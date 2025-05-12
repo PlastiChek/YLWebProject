@@ -31,6 +31,15 @@
     </div>
     {% endfor %}
     </p>
+    <p>
+        {{ form.number.label }}<br>
+        {{ form.number(class="form-control") }}<br>
+        {% for error in form.number.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     <a href="catalog" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Каталог</a>
     <a href="find" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Найти товар</a>

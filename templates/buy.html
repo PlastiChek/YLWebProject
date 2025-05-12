@@ -1,43 +1,131 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Ваш заказ</title>
-    <!-- подключаем бутстрап -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <title>Заказ</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <style>
-    body {
-      background-color: #f8f9fa; /* Светло-серый фон */
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh; /* Обеспечивает заполнение всего экрана */
-      margin: 0; /* Убирает стандартные отступы */
-      background: linear-gradient(to bottom, #e0f2f7, #cce5ff); /* Нежный голубой градиент */
-    }
+        body {
+          background-color: #f8f9fa; /* Светло-серый фон */
+          font-family: 'Arial', sans-serif;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh; /* Обеспечивает заполнение всего экрана */
+          margin: 0; /* Убирает стандартные отступы */
+          background: linear-gradient(to bottom, #e0f2f7, #cce5ff); /* Нежный голубой градиент */
+        }
 
-  </style>
+        .container {
+          width: 90%; /* Увеличил ширину контейнера */
+          margin: 30px auto;
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 30px;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 2.5em;
+          font-weight: normal;
+        }
+
+        .product-table {
+          width: 100%; /* Таблица на всю ширину контейнера */
+          border-collapse: collapse; /* Убирает двойные границы */
+        }
+
+        .product-table th, .product-table td {
+          padding: 12px 15px;
+          text-align: left;
+          border-bottom: 1px solid #eee; /* Светлая линия между строками */
+        }
+
+        .product-table th {
+          font-size: 1.2em;
+          color: #333;
+          font-weight: normal;
+          font-family: 'Cormorant Garamond', serif;
+          text-align: center; /* Выравнивание заголовков по центру */
+        }
+
+        .product-table tbody tr:hover {
+          background-color: #f9f9f9; /* Подсветка строки при наведении */
+        }
+
+        .product-table td {
+          vertical-align: middle; /* Выравнивание содержимого ячеек по вертикали */
+        }
+        /* Ссылка на Telegram */
+        .telegram-link {
+              color: white; /* Белый цвет текста */
+              text-decoration: none; /* Убирает подчеркивание */
+        }
+
+        .telegram-link:hover {
+              text-decoration: underline; /* Подчеркивание при наведении */
+        }
+
+        main {
+          flex: 1; /* Растягивает main на оставшееся пространство */
+        }
+
+        footer {
+          background-color: #343a40; /* Темно-серый фон для подвала */
+          color: white;
+          text-align: center;
+          padding: 10px;
+          margin-top: 20px;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap');
+    </style>
 </head>
 <body>
-<!-- создаём контейнер -->
+
+<main role="main" class="container">
 <div class="container">
-    <div class="row">
-        <!-- указываем стиль адаптивной вёрстки -->
-        <div class="col-md-12">
-            <!-- пишем заголовок и пояснительный текст -->
-            <h2>Ваш заказ</h2>
-            <p>
-                <!-- кнопка для выхода -->
-                <a href="success" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Вернуться на
-                    домашнюю страницу</a>
-                <a href="buy" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Показать чек</a>
-            </p>
+    <h1>Ваш заказ</h1>
+    <a href="success" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Главная страница</a>
+
+    <table class="product-table">
+        <tbody>
+        <tr>
             {% for item in list %}
-            <div>{{item}}</div>
+            <td>{{item}}</td>
 
             {% endfor %}
-        </div>
-    </div>
+        </tr>
+        <tr>
+            {% for item in list1 %}
+            <td>{{item}}</td>
+
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for item in list2 %}
+            <td>{{item}}</td>
+
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for item in list3 %}
+            <td>{{item}}</td>
+
+            {% endfor %}
+
+            {{message}}
+        </tr>
+        </tbody>
+    </table>
 </div>
+</main>
+<footer>
+    <p><a class="telegram-link" href="https://t.me/ваша_ссылка_на_телеграм" target="_blank">Поддержка</a></p>
+    <p><a class="telegram-link" href="https://t.me/ваша_ссылка_на_телеграм" target="_blank">Полезная информация</a></p>
+</footer>
+
 </body>
 </html>

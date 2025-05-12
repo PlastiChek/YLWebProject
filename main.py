@@ -12,6 +12,9 @@ from data.basket import Basket
 from data import db_session
 import sys
 import requests
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -41,7 +44,7 @@ map_image()
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('home.html', title='Домашняя страница', username='username')
+    return render_template('home.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -98,7 +101,7 @@ def login1():
 
 @app.route('/success')
 def main():
-    return render_template('shop.html', title='Домашняя страница')
+    return render_template('shop.html')
 
 
 @app.route("/office", methods=['GET', 'POST'])
@@ -112,7 +115,6 @@ def my_office():
     if not user_id:
         return redirect("/login")
     user = db_sess.query(User).get(user_id)
-    print(user.password)
     form.nickname.data = user.nickname
     form.name.data = user.name
     form.email.data = user.email
@@ -181,7 +183,8 @@ def find():
             return render_template('find.html', title='Поиск товаров',
                                    form=form, list=result)
 
-        return redirect('/success')
+        return render_template('find.html', title='Поиск товаров',
+                               form=form, message="Такого товара нет")
 
     return render_template('find.html', title='Поиск товаров', form=form)
 
@@ -214,7 +217,9 @@ def add():
         )
         db_sess.add(product)
         db_sess.commit()
-        return redirect('/add')
+        return render_template('add.html', title='Добавить товар',
+                               form=form,
+                               message="Товар добавлен")
     return render_template('add.html', title='Добавить товар', form=form)
 
 
@@ -227,29 +232,25 @@ def catalog():
     providers = [product.provider for product in products_db]
     types = [product.type for product in products_db]
     result = []
-    for index in range(len(names)):
-        stroka = (
-            f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}, "
-            f"Тип продукта: {types[index - 1]}")
-        result.append(stroka)
-
-    return render_template('catalog.html', list=result)
+    for i in range(len(names)):
+        result.append([names[i], prices[i], providers[i], types[i]])
+    return render_template('catalog.html', title='Домашняя страница', list=names, list1=prices, list2=providers,
+                           list3=types)
 
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():
     db_sess = db_session.create_session()
-    basket = db_sess.query(Basket).all()
-    names = [product.name for product in basket]
-    prices = [product.price for product in basket]
-    providers = [product.provider for product in basket]
+    products_db = db_sess.query(Basket).all()
+    names = [product.name for product in products_db]
+    prices = [product.price for product in products_db]
+    providers = [product.provider for product in products_db]
+    numbers = [product.number for product in products_db]
     result = []
-    for index in range(len(names)):
-        stroka = (
-            f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}")
-        result.append(stroka)
-
-    return render_template('basket.html', list=result)
+    for i in range(len(names)):
+        result.append([names[i], prices[i], providers[i], numbers[i]])
+    return render_template('basket.html', title='Домашняя страница', list=names, list1=prices, list2=providers,
+                           list3=numbers)
 
 
 @app.route('/adding-basket', methods=['GET', 'POST'])
@@ -264,19 +265,24 @@ def adding_basket():
             return render_template('adding-basket.html', title='Добавить товар в корзину',
                                    form=form, message='Такой цены товара нет')
 
-        elif db_sess.query(Product).filter(Product.provider == form.provider.data).first():
+        elif not db_sess.query(Product).filter(Product.provider == form.provider.data).first():
             return render_template('adding-basket.html', title='Добавить товар в корзину',
                                    form=form, message='Такого поставщика товара нет')
+        elif form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('adding-basket.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
 
         product = Basket(
             name=form.name.data,
             price=form.price.data,
             provider=form.provider.data,
+            number=form.number.data
         )
         db_sess.add(product)
         db_sess.commit()
 
-        return redirect('/adding-basket')
+        return render_template('adding-basket.html', title='Добавить товар в корзину',
+                               form=form, message='Товар в корзине')
 
     return render_template('adding-basket.html', title='Добавить товар в корзину', form=form)
 
@@ -296,13 +302,18 @@ def delete():
         elif db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
             return render_template('delete.html', title='Удалить товар',
                                    form=form, message='Такого поставщика товара нет')
+        elif db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
+            return render_template('delete.html', title='Удалить товар',
+                                   form=form, message='Такого кол-ва товара нет')
 
         product = db_sess.query(User).filter(Basket.name == form.name.data, Basket.price == form.price.data,
-                                             Basket.provider == form.provider.data).first()
+                                             Basket.provider == form.provider.data,
+                                             Basket.number == form.number.data).first()
         db_sess.delete(product)
         db_sess.commit()
 
-        return redirect('/delete')
+        return render_template('delete.html', title='Удалить товар',
+                               form=form, message='Товар удалён')
 
     return render_template('delete.html', title='Удалить товар', form=form)
 
@@ -310,20 +321,223 @@ def delete():
 @app.route('/buy', methods=['GET', 'POST'])
 def buy():
     db_sess = db_session.create_session()
-    basket = db_sess.query(Basket).all()
-    names = [product.name for product in basket]
-    prices = [product.price for product in basket]
-    providers = [product.provider for product in basket]
+    products_db = db_sess.query(Basket).all()
+    names = [product.name for product in products_db]
+    prices = [product.price for product in products_db]
+    providers = [product.provider for product in products_db]
+    numbers = [product.number for product in products_db]
     result = []
     count = 0
-    for index in range(len(names)):
-        stroka = (
-            f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}")
-        result.append(stroka)
-        count += prices[index - 1]
-    result.append(f"Итого: {count} рублей")
+    for i in range(len(names)):
+        count += prices[i]
+        result.append([names[i], prices[i], providers[i], numbers[i]])
+    return render_template('buy.html', title='Домашняя страница', list=names, list1=prices, list2=providers,
+                           list3=numbers, message=f"Итого: {count} рублей")
 
-    return render_template('buy.html', list=result)
+
+class Popular(FlaskForm):
+    name = StringField('Название', validators=[DataRequired()])
+    price = StringField('Цена', validators=[DataRequired()])
+    provider = StringField('Поставщик', validators=[DataRequired()])
+    type = StringField('Тип товара', validators=[DataRequired()])
+    number = StringField('Кол-во', validators=[DataRequired()])
+    submit = SubmitField('Добавить в корзину')
+
+
+@app.route('/cola', methods=['GET', 'POST'])
+def cola():
+    form = Popular()
+    form.name.data = "Кока-кола"
+    form.price.data = 150
+    form.provider.data = "Россия"
+    form.type.data = "Продукты"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
+
+
+@app.route('/eclipse', methods=['GET', 'POST'])
+def eclipse():
+    form = Popular()
+    form.name.data = "Жвачка eclipse"
+    form.price.data = 23
+    form.provider.data = "Россия"
+    form.type.data = "Продукты"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
+
+
+@app.route('/liner', methods=['GET', 'POST'])
+def liner():
+    form = Popular()
+    form.name.data = "Лайнер"
+    form.price.data = 215
+    form.provider.data = "Китай"
+    form.type.data = "Концелярия"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
+
+
+@app.route('/milka', methods=['GET', 'POST'])
+def milka():
+    form = Popular()
+    form.name.data = "Милка"
+    form.price.data = 180
+    form.provider.data = "Россия"
+    form.type.data = "Продукты"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
+
+
+@app.route('/notebook', methods=['GET', 'POST'])
+def notebook():
+    form = Popular()
+    form.name.data = "Блокнот"
+    form.price.data = 100
+    form.provider.data = "Россия"
+    form.type.data = "Концелярия"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
+
+
+@app.route('/pencil', methods=['GET', 'POST'])
+def pencil():
+    form = Popular()
+    form.name.data = "Карандаш"
+    form.price.data = 120
+    form.provider.data = "Россия"
+    form.type.data = "Концелярия"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
+
+
+@app.route('/lipton', methods=['GET', 'POST'])
+def lipton():
+    form = Popular()
+    form.name.data = "Липтон"
+    form.price.data = 80
+    form.provider.data = "Россия"
+    form.type.data = "Продукты"
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if form.number.data == 0 or not form.number.data.isdigit():
+            return render_template('popular.html', title='Добавить товар в корзину',
+                                   form=form, message='Введите кол-во товаров')
+
+        product = Basket(
+            name=form.name.data,
+            price=form.price.data,
+            provider=form.provider.data,
+            number=form.number.data
+        )
+        db_sess.add(product)
+        db_sess.commit()
+
+        return render_template('popular.html', title='Добавить товар в корзину',
+                               form=form, message="Товар в корзине")
+
+    return render_template('popular.html', title='Популярные товары', form=form)
 
 
 if __name__ == '__main__':

@@ -10,3 +10,4 @@ class Basket(SqlAlchemyBase):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     price = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     provider = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    number = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
