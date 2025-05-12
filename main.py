@@ -329,7 +329,7 @@ def buy():
     result = []
     count = 0
     for i in range(len(names)):
-        count += prices[i]
+        count += prices[i] * numbers[i]
         result.append([names[i], prices[i], providers[i], numbers[i]])
     return render_template('buy.html', title='Домашняя страница', list=names, list1=prices, list2=providers,
                            list3=numbers, message=f"Итого: {count} рублей")
@@ -353,7 +353,7 @@ def cola():
     form.type.data = "Продукты"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
@@ -381,7 +381,7 @@ def eclipse():
     form.type.data = "Продукты"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
@@ -409,7 +409,7 @@ def liner():
     form.type.data = "Концелярия"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
@@ -437,7 +437,7 @@ def milka():
     form.type.data = "Продукты"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
@@ -465,7 +465,7 @@ def notebook():
     form.type.data = "Концелярия"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
@@ -493,7 +493,7 @@ def pencil():
     form.type.data = "Концелярия"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
@@ -521,7 +521,7 @@ def lipton():
     form.type.data = "Продукты"
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        if form.number.data == 0 or not form.number.data.isdigit():
+        if form.number.data == "0" or not form.number.data.isdigit():
             return render_template('popular.html', title='Добавить товар в корзину',
                                    form=form, message='Введите кол-во товаров')
 
