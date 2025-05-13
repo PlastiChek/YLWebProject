@@ -140,51 +140,52 @@ def find():
         types = [product.type for product in products_db]
         result = []
         id = []
+        n, p, pr, ty = [], [], [], []
         if db_sess.query(Product).filter(Product.name == form.find.data).first():
             for i in db_sess.query(Product).filter(Product.name == form.find.data):
                 id.append(i.id)
             for index in id:
-                stroka = (
-                    f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}, "
-                    f"Тип продукта: {types[index - 1]}")
-                result.append(stroka)
-            return render_template('find.html', title='Поиск товаров',
-                                   form=form, list=result)
+                n.append(names[index - 1])
+                p.append(prices[index - 1])
+                pr.append(providers[index - 1])
+                ty.append(types[index - 1])
+            return render_template('find-success.html', list=n, list1=p, list2=pr,
+                                   list3=ty)
         elif db_sess.query(Product).filter(Product.price == form.find.data).first():
             for i in db_sess.query(Product).filter(Product.price == form.find.data):
                 id.append(i.id)
             for index in id:
-                stroka = (
-                    f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}, "
-                    f"Тип продукта: {types[index - 1]}")
-                result.append(stroka)
-            return render_template('find.html', title='Поиск товаров',
-                                   form=form, list=result)
+                n.append(names[index - 1])
+                p.append(prices[index - 1])
+                pr.append(providers[index - 1])
+                ty.append(types[index - 1])
+            return render_template('find-success.html', list=n, list1=p, list2=pr,
+                                   list3=ty)
 
         elif db_sess.query(Product).filter(Product.provider == form.find.data).first():
             for i in db_sess.query(Product).filter(Product.provider == form.find.data):
                 id.append(i.id)
             for index in id:
-                stroka = (
-                    f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}, "
-                    f"Тип продукта: {types[index - 1]}")
-                result.append(stroka)
-            return render_template('find.html', title='Поиск товаров',
-                                   form=form, list=result)
+                n.append(names[index - 1])
+                p.append(prices[index - 1])
+                pr.append(providers[index - 1])
+                ty.append(types[index - 1])
+            return render_template('find-success.html', list=n, list1=p, list2=pr,
+                                   list3=ty)
 
         elif db_sess.query(Product).filter(Product.type == form.find.data).first():
             for i in db_sess.query(Product).filter(Product.type == form.find.data):
                 id.append(i.id)
             for index in id:
-                stroka = (
-                    f"Название: {names[index - 1]}, Цена: {prices[index - 1]}, Поставщик: {providers[index - 1]}, "
-                    f"Тип продукта: {types[index - 1]}")
-                result.append(stroka)
-            return render_template('find.html', title='Поиск товаров',
-                                   form=form, list=result)
+                n.append(names[index - 1])
+                p.append(prices[index - 1])
+                pr.append(providers[index - 1])
+                ty.append(types[index - 1])
+            return render_template('find-success.html', list=n, list1=p, list2=pr,
+                                   list3=ty)
 
         return render_template('find.html', title='Поиск товаров',
-                               form=form, message="Такого товара нет")
+                               form=form, message="Неверные данные")
 
     return render_template('find.html', title='Поиск товаров', form=form)
 
