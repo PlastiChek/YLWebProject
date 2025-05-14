@@ -91,6 +91,7 @@ def login1():
             nickname=form.nickname.data,
             name=form.name.data,
             email=form.email.data,
+            telegram_id=form.telegram_id.data,
             password=form.password.data,
         )
         db_sess.add(user)
@@ -118,6 +119,7 @@ def my_office():
     form.nickname.data = user.nickname
     form.name.data = user.name
     form.email.data = user.email
+    form.telegram_id.data = user.telegram_id
     form.password.data = user.password
     return render_template('office.html', title='Ваш аккаунт', form=form)
 
@@ -294,20 +296,20 @@ def delete():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         if not db_sess.query(Basket).filter(Basket.name == form.name.data).first():
-            return render_template('adding-basket.html', title='Удалить товар',
+            return render_template('delete.html', title='Удалить товар',
                                    form=form, message='Такого названия товара нет')
         elif not db_sess.query(Basket).filter(Basket.price == form.price.data).first():
             return render_template('delete.html', title='Удалить товар',
                                    form=form, message='Такой цены товара нет')
 
-        elif db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
+        elif not db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
             return render_template('delete.html', title='Удалить товар',
                                    form=form, message='Такого поставщика товара нет')
-        elif db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
+        elif not db_sess.query(Basket).filter(Basket.provider == form.provider.data).first():
             return render_template('delete.html', title='Удалить товар',
                                    form=form, message='Такого кол-ва товара нет')
 
-        product = db_sess.query(User).filter(Basket.name == form.name.data, Basket.price == form.price.data,
+        product = db_sess.query(Basket).filter(Basket.name == form.name.data, Basket.price == form.price.data,
                                              Basket.provider == form.provider.data,
                                              Basket.number == form.number.data).first()
         db_sess.delete(product)
