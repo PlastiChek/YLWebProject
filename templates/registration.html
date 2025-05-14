@@ -31,6 +31,16 @@
     </div>
     {% endfor %}
     </p>
+    </p>
+    <p>
+        {{ form.telegram_id.label }}<br>
+        {{ form.telegram_id(class="form-control") }}<br>
+        {% for error in form.telegram_id.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
     <p>
         {{ form.password.label }}<br>
         {{ form.password(class="form-control", type="password") }}<br>
