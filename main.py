@@ -310,8 +310,8 @@ def delete():
                                    form=form, message='Такого кол-ва товара нет')
 
         product = db_sess.query(Basket).filter(Basket.name == form.name.data, Basket.price == form.price.data,
-                                             Basket.provider == form.provider.data,
-                                             Basket.number == form.number.data).first()
+                                               Basket.provider == form.provider.data,
+                                               Basket.number == form.number.data).first()
         db_sess.delete(product)
         db_sess.commit()
 

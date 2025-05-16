@@ -262,7 +262,7 @@ def main() -> None:
         ),
         admin_message
     ))
-
+    logger.info("Бот запущен...")
     application.run_polling()
 
 
