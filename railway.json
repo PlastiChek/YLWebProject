@@ -2,16 +2,22 @@
   "builds": [
     {
       "src": "requirements.txt",
-      "use": "@railway/python"
+      "use": "@railway/python",
+      "name": "Bot Support"
+    },
+    {
+      "src": "requirements.txt",
+      "use": "@railway/python",
+      "name": "Bot News"
     }
   ],
   "deployments": [
     {
-      "name": "Bot support",
+      "name": "Bot Support",
       "command": "python tg_bot_support.py"
     },
     {
-      "name": "Bot news",
+      "name": "Bot News",
       "command": "python tg_bot_news.py"
     }
   ]
